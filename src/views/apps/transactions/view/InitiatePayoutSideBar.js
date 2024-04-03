@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 
 // ** MUI Imports
 import Drawer from '@mui/material/Drawer'
@@ -29,16 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Actions Imports
 import { addUser, fetchUsers } from 'src/store/apps/user'
 import { Switch } from '@mui/material'
-
-const showErrors = (field, valueLen, min) => {
-  if (valueLen === 0) {
-    return `${field} field is required`
-  } else if (valueLen > 0 && valueLen < min) {
-    return `${field} must be at least ${min} characters`
-  } else {
-    return ''
-  }
-}
+import { initiatePayout } from 'src/store/apps/transactions'
 
 const Header = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -48,29 +39,23 @@ const Header = styled(Box)(({ theme }) => ({
 }))
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  firstName: yup
-    .string()
-    .min(3, obj => showErrors('First Name', obj.value.length, obj.min))
-    .required(),
-  lastName: yup
-    .string()
-    .min(3, obj => showErrors('Last Name', obj.value.length, obj.min))
-    .required()
+  recipientId: yup.string().required(),
+  amount: yup.string().required(),
+  narration: yup.string().required()
 })
 
 const defaultValues = {
-  userId: '',
-  beneficiaryId: '',
+  recipientId: '',
   amount: '',
-  initiatedBy: ''
+  narration: ''
 }
 
 const InitiatePayoutSideBar = props => {
   // ** Props
   const { open, toggle } = props
+
+  // const [recipient, setRecipient] = useState(null)
   const users = useSelector(state => state.user)
-  console.log({ users })
 
   // ** State
   const [role, setRole] = useState('USER')
@@ -91,21 +76,29 @@ const InitiatePayoutSideBar = props => {
   })
 
   const onSubmit = data => {
-    dispatch(addUser({ ...data, role }))
+    console.log({ data })
+
+    dispatch(initiatePayout({ ...data }))
 
     toggle()
     reset()
   }
 
   const handleClose = () => {
-    setRole('USER')
     toggle()
     reset()
   }
 
-  // useEffect(() => {
-  //   dispatch(fetchUsers())
-  // }, [dispatch])
+  useEffect(() => {
+    let done = false
+    if (done == false) {
+      dispatch(fetchUsers({ all: true, page: 1, limit: 100, orderBy: 'firstName', sort: 'Desc' }))
+    }
+
+    return () => {
+      done = true
+    }
+  }, [])
 
   return (
     <Drawer
@@ -129,19 +122,39 @@ const InitiatePayoutSideBar = props => {
       <Box sx={{ p: theme => theme.spacing(0, 6, 6) }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl fullWidth sx={{ mb: 4 }}>
-            <InputLabel id='role-select'>Select Merchant</InputLabel>
-            <Select
-              fullWidth
-              value={role}
-              id='select-role'
-              label='Select Role'
-              labelId='role-select'
-              onChange={e => setRole(e.target.value)}
-              inputProps={{ placeholder: 'Select Role' }}
-            >
-              <MenuItem value='ADMIN'>Admin</MenuItem>
-            </Select>
+            <InputLabel id='select-merchant'>Select Merchant</InputLabel>
+            <Controller
+              name='recipientId'
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <>
+                  <Select
+                    fullWidth
+                    name='recipientId'
+                    value={value}
+                    required
+                    id='select-merchant'
+                    label='Select Merchant'
+                    labelId='select-merchant'
+                    onChange={onChange}
+                    inputProps={{ placeholder: 'Select Merchant' }}
+                  >
+                    <MenuItem value=''>Select Merchant for payout</MenuItem>
+                    {users?.data?.map((item, index) => (
+                      <MenuItem key={index} value={`${item.id}`}>
+                        {item.firstName} {item.lastName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </>
+              )}
+            />
+            {errors.recipientId && (
+              <FormHelperText sx={{ color: 'error.main' }}>{errors.recipientId.message}</FormHelperText>
+            )}
           </FormControl>
+
           <FormControl fullWidth sx={{ mb: 4 }}>
             <Controller
               name='amount'
@@ -153,11 +166,11 @@ const InitiatePayoutSideBar = props => {
                   label='Amount'
                   onChange={onChange}
                   placeholder='NGN 0000.00'
-                  error={Boolean(errors.fullName)}
+                  error={Boolean(errors.amount)}
                 />
               )}
             />
-            {errors.name && <FormHelperText sx={{ color: 'error.main' }}>{errors.name.message}</FormHelperText>}
+            {errors.amount && <FormHelperText sx={{ color: 'error.main' }}>{errors.amount.message}</FormHelperText>}
           </FormControl>
 
           <FormControl fullWidth sx={{ mb: 4 }}>
@@ -174,12 +187,12 @@ const InitiatePayoutSideBar = props => {
                   label='Narration'
                   onChange={onChange}
                   placeholder='Lorem ipsum'
-                  error={Boolean(errors.decription)}
+                  error={Boolean(errors.narration)}
                 />
               )}
             />
-            {errors.decription && (
-              <FormHelperText sx={{ color: 'error.main' }}>{errors.decription.message}</FormHelperText>
+            {errors.narration && (
+              <FormHelperText sx={{ color: 'error.main' }}>{errors.narration.message}</FormHelperText>
             )}
           </FormControl>
 
@@ -197,4 +210,4 @@ const InitiatePayoutSideBar = props => {
   )
 }
 
-export default InitiatePayoutSideBar
+export default memo(InitiatePayoutSideBar)

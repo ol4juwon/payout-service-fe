@@ -41,6 +41,7 @@ import { UserService } from 'src/Service/Api/services'
 import themeConfig from 'src/configs/themeConfig'
 import { CircularProgress } from '@mui/material'
 import { useRouter } from 'next/router'
+import { formatMoney } from 'src/@core/utils/format'
 
 const data = {
   id: 1,
@@ -150,7 +151,6 @@ const UserViewLeft = ({ userDetails }) => {
                   </CustomAvatar>
                   <div>
                     <Typography sx={{ fontWeight: 500, color: 'text.secondary' }}>
-                      {'NGN '}
                       {userDetails?.transactions.length}
                     </Typography>
                     <Typography variant='body2'>Total Payouts</Typography>
@@ -162,7 +162,7 @@ const UserViewLeft = ({ userDetails }) => {
                   </CustomAvatar>
                   <div>
                     <Typography sx={{ fontWeight: 500, color: 'text.secondary' }}>
-                      NGN {userDetails?.wallet?.balance}
+                      {formatMoney(userDetails?.wallet?.balance)}
                     </Typography>
                     <Typography variant='body2'>Wallet Balance</Typography>
                   </div>

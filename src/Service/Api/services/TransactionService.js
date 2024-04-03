@@ -1,5 +1,5 @@
 import FetchAPI from '../fetchAPI'
-import { getAllTransactionUrl, getTransactionDetailsUrl, getValidateAccountUrl } from '../endPoints'
+import { getAllTransactionUrl, getTransactionDetailsUrl, getValidateAccountUrl, getInitiatePayoutUrl } from '../endPoints'
 
 export const getAllTransactions = async query => {
   return FetchAPI(getAllTransactionUrl(query), 'GET')
@@ -15,4 +15,6 @@ export const validateAccount = body => {
   return FetchAPI(getValidateAccountUrl(), 'POST', body)
 }
 
-export const initiatePayouts = body => {}
+export const initiatePayouts = async body => {
+  return FetchAPI(getInitiatePayoutUrl(), 'POST', body)
+}

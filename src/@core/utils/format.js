@@ -16,7 +16,21 @@ const isToday = date => {
   )
 }
 
-export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
+export const formatMoney = amount => {
+  return amount.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' })
+}
+
+export const formatDate = (
+  value,
+  formatting = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  }
+) => {
   if (!value) return value
 
   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))

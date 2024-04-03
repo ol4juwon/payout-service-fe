@@ -41,84 +41,6 @@ import { fetchProviders } from 'src/store/apps/providers'
 import TableHeader from 'src/views/apps/providers/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/providers/list/AddProviderDrawer'
 
-// ** renders client column
-const userRoleObj = {
-  ADMIN: { icon: 'tabler:user-shield', color: 'warning' },
-  SUPER_ADMIN: { icon: 'tabler:password-user', color: 'error' },
-  USER: { icon: 'tabler:user-circle', color: 'info' }
-}
-
-const userStatusObj = {
-  true: 'success',
-  false: 'warning'
-
-  // inactive: 'secondary'
-}
-
-// ** renders client column
-
-const RowOptions = ({ id }) => {
-  // ** Hooks
-  const dispatch = useDispatch()
-
-  // ** State
-  const [anchorEl, setAnchorEl] = useState(null)
-  const rowOptionsOpen = Boolean(anchorEl)
-
-  const handleRowOptionsClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleRowOptionsClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
-  }
-
-  return (
-    <>
-      <IconButton size='small' onClick={handleRowOptionsClick}>
-        <Icon icon='tabler:dots-vertical' />
-      </IconButton>
-      <Menu
-        keepMounted
-        anchorEl={anchorEl}
-        open={rowOptionsOpen}
-        onClose={handleRowOptionsClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        PaperProps={{ style: { minWidth: '8rem' } }}
-      >
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          href='/apps/user/view/account'
-          onClick={handleRowOptionsClose}
-        >
-          <Icon icon='tabler:eye' fontSize={20} />
-          View
-        </MenuItem>
-        <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:edit' fontSize={20} />
-          Edit
-        </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:trash' fontSize={20} />
-          Delete
-        </MenuItem>
-      </Menu>
-    </>
-  )
-}
 
 const columns = [
   {
@@ -131,12 +53,9 @@ const columns = [
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* {renderClient(row)} */}
           <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
             <Typography
               noWrap
-              // component={Link}
-              // href='/apps/user/view/account'
               sx={{
                 fontWeight: 500,
                 textDecoration: 'none',
@@ -193,24 +112,6 @@ const columns = [
       )
     }
   }
-
-  // {
-  //   flex: 0.1,
-  //   minWidth: 110,
-  //   field: 'active',
-  //   headerName: 'Status',
-  //   renderCell: ({ row }) => {
-  //     return <p>kk</p>
-  //   }
-  // },
-  // {
-  //   flex: 0.1,
-  //   minWidth: 100,
-  //   sortable: false,
-  //   field: 'actions',
-  //   headerName: 'Actions',
-  //   renderCell: ({ row }) => <RowOptions id={row.id} />
-  // }
 ]
 
 const ProvidersList = ({ apiData }) => {
@@ -272,68 +173,6 @@ const ProvidersList = ({ apiData }) => {
       </Grid>
       <Grid item xs={12}>
         <Card>
-          {/* <CardHeader title='Search Filters' />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
-                  <Select
-                    fullWidth
-                    value={role}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='ADMIN'>Admin</MenuItem>
-                    <MenuItem value='USER'>User</MenuItem>
-                    <MenuItem value='SUPERAMIN'>Editor</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              {/* <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='plan-select'>Select Plan</InputLabel>
-                  <Select
-                    fullWidth
-                    value={plan}
-                    id='select-plan'
-                    label='Select Plan'
-                    labelId='plan-select'
-                    onChange={handlePlanChange}
-                    inputProps={{ placeholder: 'Select Plan' }}
-                  >
-                    <MenuItem value=''>Select Plan</MenuItem>
-                    <MenuItem value='basic'>Basic</MenuItem>
-                    <MenuItem value='company'>Company</MenuItem>
-                    <MenuItem value='enterprise'>Enterprise</MenuItem>
-                    <MenuItem value='team'>Team</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='status-select'>Select Status</InputLabel>
-                  <Select
-                    fullWidth
-                    value={status}
-                    id='select-status'
-                    label='Select Status'
-                    labelId='status-select'
-                    onChange={handleStatusChange}
-                    inputProps={{ placeholder: 'Select Status' }}
-                  >
-                    <MenuItem value=''>Select Status</MenuItem>
-                    <MenuItem value='true'>Active</MenuItem>
-                    <MenuItem value='false'>Inactive</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent> */}
           <Divider sx={{ m: '0 !important' }} />
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid

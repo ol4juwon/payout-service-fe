@@ -72,6 +72,10 @@ export const getValidateAccountUrl = () => {
   return `/transactions/nameEnquiry`
 }
 
+export const getInitiatePayoutUrl = () => {
+  return `/transactions/initiatePayouts`
+}
+
 export const getAddBeneficiaryURl = () => {
   return '/beneficiaries/'
 }

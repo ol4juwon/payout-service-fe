@@ -46,6 +46,7 @@ import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
 import { fetchTransations } from 'src/store/apps/transactions'
 import TransactionDetails from 'src/views/apps/transactions/view/TransactionDetails'
 import InitiatePayoutSideBar from 'src/views/apps/transactions/view/InitiatePayoutSideBar'
+import { formatDate, formatMoney } from 'src/@core/utils/format'
 
 // ** renders client column
 const userRoleObj = {
@@ -55,27 +56,10 @@ const userRoleObj = {
 }
 
 const userStatusObj = {
-  true: 'success',
-  false: 'warning'
-
-  // inactive: 'secondary'
-}
-
-// ** renders client column
-const renderClient = row => {
-  if (row?.avatar?.length) {
-    return <CustomAvatar src={row.avatar} sx={{ mr: 2.5, width: 38, height: 38 }} />
-  } else {
-    return (
-      <CustomAvatar
-        skin='light'
-        color={row.avatarColor}
-        sx={{ mr: 2.5, width: 38, height: 38, fontSize: '1rem', fontWeight: 500 }}
-      >
-        {getInitials(row.firstName ? row.firstName : 'John Doe')}
-      </CustomAvatar>
-    )
-  }
+  SUCCESSFUL: 'success',
+  PROCESSING: 'warning',
+  FAILED: 'error',
+  PENDING: 'secondary'
 }
 
 const RowOptions = ({ id, detailss }) => {
@@ -87,7 +71,7 @@ const RowOptions = ({ id, detailss }) => {
   const [open, setOpen] = useState(false)
   const [toggleOpen, setToggleOpen] = useState(false)
   const rowOptionsOpen = Boolean(anchorEl)
-  const toggleDrawer = () => setToggleOpen(!toggleOpen)
+  const toggleDrawer = () => setOpen(!open)
 
   const handleRowOptionsClick = event => {
     setAnchorEl(event.currentTarget)
@@ -126,14 +110,6 @@ const RowOptions = ({ id, detailss }) => {
           <Icon icon='tabler:eye' fontSize={20} />
           View
         </MenuItem>
-        <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:edit' fontSize={20} />
-          Edit
-        </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:trash' fontSize={20} />
-          Delete
-        </MenuItem>
       </Menu>
 
       <TransactionDetails open={open} toggle={toggleDrawer} />
@@ -164,7 +140,7 @@ const columns = [
                 '&:hover': { color: 'primary.main' }
               }}
             >
-              {createdAt}
+              {formatDate(createdAt)}
             </Typography>
           </Box>
         </Box>
@@ -180,13 +156,40 @@ const columns = [
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.amount}
+            {formatMoney(row.amount)}
           </Typography>
         </Box>
       )
     }
   },
-
+  {
+    flex: 0.15,
+    field: 'accountNo',
+    minWidth: 170,
+    headerName: 'account No.',
+    renderCell: ({ row }) => {
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+            {row.Beneficiary.accountNo}
+          </Typography>
+        </Box>
+      )
+    }
+  },
+  {
+    flex: 0.1,
+    minWidth: 110,
+    field: 'Beneficiary.MappedBankCode.bankName',
+    headerName: 'Bank',
+    renderCell: ({ row }) => {
+      return (
+        <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
+          {row.Beneficiary.MappedBankCode.bankName}
+        </Typography>
+      )
+    }
+  },
   {
     flex: 0.1,
     minWidth: 110,
@@ -198,7 +201,7 @@ const columns = [
           rounded
           skin='light'
           size='small'
-          label={row.stau ? 'Verified' : 'Unverified'}
+          label={row.status}
           color={userStatusObj[row.status]}
           sx={{ textTransform: 'capitalize' }}
         />
@@ -215,7 +218,7 @@ const columns = [
   }
 ]
 
-const UserList = ({ apiData }) => {
+const TransactionList = ({ apiData }) => {
   // ** State
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(100)
@@ -240,7 +243,7 @@ const UserList = ({ apiData }) => {
         page,
         limit,
         orderBy,
-        sort: 'desc'
+        sort: 'DESC'
       })
     )
   }, [dispatch])
@@ -249,17 +252,6 @@ const UserList = ({ apiData }) => {
     setValue(val)
   }, [])
 
-  const handleRoleChange = useCallback(e => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback(e => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback(e => {
-    setStatus(e.target.value)
-  }, [])
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   return (
@@ -303,4 +295,4 @@ const UserList = ({ apiData }) => {
   )
 }
 
-export default UserList
+export default TransactionList

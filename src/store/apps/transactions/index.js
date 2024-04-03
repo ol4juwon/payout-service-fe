@@ -6,7 +6,7 @@ import { ProviderService, TransactionService } from 'src/Service/Api/services'
 // ** Fetch Users
 export const fetchTransations = createAsyncThunk(
   'transactions/fetch',
-  async ({ all = 'true', sort = 'DESC', orderBy = 'active', page = 1, limit = 10 }) => {
+  async ({ all, sort = 'DESC', orderBy = 'createdAt', page = 1, limit = 10 }) => {
     try {
       const response = await TransactionService.getAllTransactions({ all, page, limit, orderBy, sort })
 
@@ -20,14 +20,22 @@ export const fetchTransations = createAsyncThunk(
 )
 
 // ** Initiate Payout
-export const initiatePayout = createAsyncThunk('Transactions/initiatePayout', async (data, { getState, dispatch }) => {
-  // const response = await axios.post('http://localhost:5454/api/v1/providers/', {
-  //   data
-  // })
-  // dispatch(fetchData(getState().user.params))
-  // throw new error()
-  // return response.data
-})
+export const initiatePayout = createAsyncThunk(
+  'Transactions/initiatePayout',
+  async ({ amount, recipientId, narration }, { getState, dispatch }) => {
+    try {
+      const response = await TransactionService.initiatePayouts({ amount, recipientId, narration })
+      if (response.data) toast.success('Payout initiated')
+
+      if (response.error) toast.error('Payout failed')
+    } catch (error) {
+      console.log({ error })
+      toast.error(error.error)
+
+      return error
+    }
+  }
+)
 
 export const transactionsSlice = createSlice({
   name: 'transactions',
@@ -60,8 +68,9 @@ export const transactionsSlice = createSlice({
       })
       .addCase(initiatePayout.fulfilled, (state, action) => {
         state.loading = false
-        state.transactions = [...state.transactions, action.payload]
-        state.total = [...state.transactions, action.payload].length
+
+        // state.transactions = [...state.transactions, action.payload]
+        // state.total = [...state.transactions, action.payload].length
       })
       .addCase(initiatePayout.rejected, (state, action) => {
         state.loading = false

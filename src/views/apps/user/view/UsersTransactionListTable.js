@@ -14,13 +14,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 
 // ** Third Party Imports
 import axios from 'axios'
-
-const Img = styled('img')(({ theme }) => ({
-  width: 32,
-  height: 32,
-  borderRadius: '50%',
-  marginRight: theme.spacing(2.5)
-}))
+import { formatDate, formatMoney } from 'src/@core/utils/format'
 
 const columns = [
   {
@@ -31,13 +25,9 @@ const columns = [
     headerName: 'Amount',
     renderCell: ({ row }) => (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <Img src={row.img} alt={`project-${row.projectTitle}`} />
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Typography sx={{ fontWeight: 500, color: 'text.secondary' }}>{row.projectTitle}</Typography>
-          <Typography variant='body2' sx={{ color: 'text.disabled' }}>
-            {row.projectType}
-          </Typography>
-        </Box>
+        <Typography variant='body2' sx={{ color: 'text.primary' }}>
+          {formatMoney(row.amount)}
+        </Typography>
       </Box>
     )
   },
@@ -46,7 +36,7 @@ const columns = [
     minWidth: 200,
     field: 'createdAt',
     headerName: 'Transaction Date',
-    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{row.createdAt}</Typography>
+    renderCell: ({ row }) => <Typography sx={{ color: 'text.secondary' }}>{formatDate(row.createdAt)}</Typography>
   },
   {
     flex: 0.25,
@@ -55,7 +45,7 @@ const columns = [
     field: 'status',
     renderCell: ({ row }) => (
       <Box sx={{ width: '100%' }}>
-        <Typography sx={{ mb: 1.5, color: 'text.secondary' }}>{`${row.status}`}</Typography>
+        <Typography sx={{ mb: 1.5, color: 'text.primary' }}>{`${row.status}`}</Typography>
         {/* <LinearProgress sx={{ height: 8 }} variant='determinate' value={row.progressValue} color={row.progressColor} /> */}
       </Box>
     )
@@ -66,13 +56,14 @@ const columns = [
     field: 'provider',
     headerName: 'Provider',
     renderCell: ({ row }) => (
-      <Typography sx={{ color: 'text.secondary' }}>{`${row?.provider || row.channel}`}</Typography>
+      <Typography sx={{ color: 'text.primary' }}>{`${row?.provider || 'not available'}`}</Typography>
     )
   }
 ]
 
 const TransactionListTable = ({ transactions }) => {
   // ** State
+  console.log({ transactions })
   const [value, setValue] = useState('')
   const [pageSize, setPageSize] = useState(7)
   const [data, setData] = useState([])
@@ -89,15 +80,8 @@ const TransactionListTable = ({ transactions }) => {
 
   return (
     <Card>
-      <CardHeader title="User's Transactions List" />
-      <CardContent>
-        {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <Typography variant='body2' sx={{ mr: 2 }}>
-            Search:
-          </Typography>
-          <TextField size='small' placeholder='Search tr' value={value} onChange={e => setValue(e.target.value)} />
-        </Box> */}
-      </CardContent>
+      <CardHeader title="User's Payout List" />
+      <CardContent></CardContent>
       <DataGrid
         autoHeight
         rows={transactions}
