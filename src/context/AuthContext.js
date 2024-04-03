@@ -47,7 +47,6 @@ const AuthProvider = ({ children }) => {
         //     setLoading(false)
         try {
           const x = jwt.verify(storedToken, process.env.NEXT_PUBLIC_JWT_SECRET)
-          console.log({ x })
           const data = jwt.decode(storedToken)
           setUser(data)
           setLoading(false)
@@ -84,11 +83,8 @@ const AuthProvider = ({ children }) => {
   const handleLogin = (params, errorCallback) => {
     AuthService.LoginUser(params)
       .then(async response => {
-        console.log({ response })
         window.localStorage.setItem(authConfig.storageTokenKeyName, response.data.token)
-        console.log(response.data.token)
         const data = jwt.decode(response.data.token)
-        console.log('dd', data)
 
         const returnUrl = router.query.returnUrl
         setUser({ ...data })

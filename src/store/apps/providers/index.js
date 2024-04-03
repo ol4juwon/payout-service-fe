@@ -56,7 +56,6 @@ export const providerSlice = createSlice({
         state.loading = true
       })
       .addCase(fetchProviders.fulfilled, (state, action) => {
-        // console.log('payload', action.payload)
         state.loading = false
         state.providers = action.payload.data
         state.total = action.payload.length

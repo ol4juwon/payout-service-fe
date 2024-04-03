@@ -29,7 +29,6 @@ export const initiatePayout = createAsyncThunk(
 
       if (response.error) toast.error('Payout failed')
     } catch (error) {
-      console.log({ error })
       toast.error(error.error)
 
       return error
@@ -53,7 +52,6 @@ export const transactionsSlice = createSlice({
         state.loading = true
       })
       .addCase(fetchTransations.fulfilled, (state, action) => {
-        // console.log('payload', action.payload)
         state.loading = false
         state.transactions = action.payload.data
         state.total = action.payload.length

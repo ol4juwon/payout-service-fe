@@ -5,7 +5,6 @@ const aboutcontroller = new AbortController()
 export default (url, method, data) => {
   // let token = ''
   const token = localStorage.getItem('accessToken')
-  console.log({ url :Config.REST_ENDPOINT + url })
   let options
 
   const args = {

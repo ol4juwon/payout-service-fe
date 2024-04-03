@@ -9,7 +9,6 @@ import UserViewRight from 'src/views/apps/user/view/UserViewRight'
 
 const UserView = ({ tab, id }) => {
   const [userDetails, setUserDetails] = useState(null)
-  console.log('id', id)
 
   const fetchUserDetails = async id => {
     const response = await UserService.getUserDetails(id)

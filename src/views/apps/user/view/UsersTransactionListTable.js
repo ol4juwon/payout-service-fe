@@ -63,7 +63,6 @@ const columns = [
 
 const TransactionListTable = ({ transactions }) => {
   // ** State
-  console.log({ transactions })
   const [value, setValue] = useState('')
   const [pageSize, setPageSize] = useState(7)
   const [data, setData] = useState([])

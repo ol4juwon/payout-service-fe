@@ -122,7 +122,6 @@ const ProvidersList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
   const providers = useSelector(state => state.provider)
-  console.log(providers)
 
   useEffect(() => {
     dispatch(

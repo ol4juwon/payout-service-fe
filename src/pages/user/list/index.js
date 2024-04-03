@@ -221,7 +221,6 @@ const columns = [
     field: 'active',
     headerName: 'Status',
     renderCell: ({ row }) => {
-      console.log({ row })
 
       return (
         <CustomChip
@@ -258,7 +257,6 @@ const UserList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  console.log({ user })
 
   useEffect(() => {
     dispatch(

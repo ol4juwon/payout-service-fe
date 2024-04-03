@@ -223,7 +223,6 @@ const UserList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
   const beneficiaries = useSelector(state => state.beneficiaries)
-  console.log(beneficiaries)
 
   useEffect(() => {
     dispatch(

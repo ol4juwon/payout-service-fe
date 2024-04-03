@@ -7,8 +7,6 @@ export const createUserUrl = () => {
 }
 
 export const getUserDetailsUrl = id => {
-  console.log({ id })
-
   return `/users/${id}`
 }
 

@@ -220,7 +220,6 @@ const TransactionList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
   const transactions = useSelector(state => state.transactions)
-  console.log({ transactions })
 
   useEffect(() => {
     dispatch(

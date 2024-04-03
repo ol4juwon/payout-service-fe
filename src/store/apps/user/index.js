@@ -32,7 +32,6 @@ export const addUser = createAsyncThunk('users/addUser', async (data, { getState
 
     return response
   } catch (err) {
-    console.info('kkdkkdk', err)
 
     throw new Error(err.error)
   }
@@ -50,7 +49,6 @@ export const usersSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        console.log('payload', action.payload)
         state.loading = false
         state.data = action.payload.data.data
         state.params = action.payload.params
@@ -62,7 +60,6 @@ export const usersSlice = createSlice({
         state.loading = false
 
         state.error = action.error
-        console.log({ action })
 
         toast.error(action.error.message)
       })

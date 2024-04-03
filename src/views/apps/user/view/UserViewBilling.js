@@ -175,11 +175,8 @@ const UserViewBilling = ({ id, user }) => {
   }, [])
 
   useEffect(() => {
-    // console.log('banks changing', banks)
     if (banks?.length > 0 && bankCodes == null) {
-      console.log('useEffect', { banks })
       if (banks?.length > 0 && bankCodes == null) {
-        console.log('bansss')
 
         setBankCodes(banks)
       }
@@ -189,7 +186,6 @@ const UserViewBilling = ({ id, user }) => {
 
   const onSubmit = data => {
     setOpenEditCard(false)
-    console.log({ data })
     dispatch(
       addBeneficiary({
         userId: id,
@@ -207,7 +203,6 @@ const UserViewBilling = ({ id, user }) => {
 
   const fetchAccount = async body => {
     const response = await TransactionService.validateAccount(body).catch(err => err)
-    console.log('name enquiry', { response })
     if (response.data) {
       setValue('accountName', response.data.account_name)
     }
@@ -222,7 +217,6 @@ const UserViewBilling = ({ id, user }) => {
         bankcode: bankcode
       })
 
-      // console.log('Name enquirty response ', response)
     }
   }, [accountNumber, bankcode])
 
@@ -382,7 +376,6 @@ const UserViewBilling = ({ id, user }) => {
                                 value={value}
                                 label='Select Bank'
                                 onChange={e => {
-                                  console.log('select', e.target)
                                   setBankcode(e.target.value)
                                   onChange(e)
                                 }}

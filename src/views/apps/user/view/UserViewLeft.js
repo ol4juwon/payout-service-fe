@@ -107,7 +107,6 @@ const UserViewLeft = ({ userDetails }) => {
   const handlePlansClose = () => setOpenPlans(false)
 
   const toggleStatus = async (id, status) => {
-    console.log({ id, status })
 
     const response = await UserService.toggleUser({ id, toggle: status })
     if (response.data) router.reload()

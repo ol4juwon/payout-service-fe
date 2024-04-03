@@ -10,7 +10,6 @@ export const fetchBeneficiaries = createAsyncThunk(
 
       return response.data
     } catch (err) {
-      console.log({ err })
       toast.error('Failed to fetch beneficiaries:\n' + err)
     }
   }
@@ -18,10 +17,8 @@ export const fetchBeneficiaries = createAsyncThunk(
 
 export const addBeneficiary = createAsyncThunk('beneficiary/add', async body => {
   try {
-    console.log('ddd7')
 
     const response = await BeneficiaryService.AddBeneficiary(body).catch(err => err)
-    console.log('ddd343', response?.error)
     if (response.error) {
       toast.error('Failed to add beneficiary:\n' + response.error)
 
@@ -32,7 +29,6 @@ export const addBeneficiary = createAsyncThunk('beneficiary/add', async body => 
 
     return response.data
   } catch (err) {
-    console.log({ err })
     toast.error('Failed to add beneficiary:\n' + err)
   }
 })
