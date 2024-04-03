@@ -32,7 +32,6 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import CardStatsHorizontalWithDetails from 'src/@core/components/card-statistics/card-stats-horizontal-with-details'
 
 // ** Utils Import
-import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Actions Imports
 import { fetchProviders } from 'src/store/apps/providers'
@@ -40,7 +39,6 @@ import { fetchProviders } from 'src/store/apps/providers'
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/providers/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/providers/list/AddProviderDrawer'
-
 
 const columns = [
   {
@@ -116,8 +114,6 @@ const columns = [
 
 const ProvidersList = ({ apiData }) => {
   // ** State
-  const [role, setRole] = useState('')
-  const [plan, setPlan] = useState('')
   const [value, setValue] = useState('')
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -137,23 +133,12 @@ const ProvidersList = ({ apiData }) => {
         sort: 'Desc'
       })
     )
-  }, [dispatch, plan, role, value])
+  }, [dispatch, page])
 
   const handleFilter = useCallback(val => {
     setValue(val)
   }, [])
 
-  const handleRoleChange = useCallback(e => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback(e => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback(e => {
-    setStatus(e.target.value)
-  }, [])
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   return (
@@ -192,23 +177,5 @@ const ProvidersList = ({ apiData }) => {
     </Grid>
   )
 }
-
-// export const getStaticProps = async () => {
-//   const token = window.localStorage.getItem('accessToken')
-
-//   const res = await axios.get('localhost:5454/api/v1/users/', {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       'x-access-token': process.env.NEXT_PUBLIC_X_ACCESS_TOKEN
-//     }
-//   })
-//   const apiData = res.data
-
-//   return {
-//     props: {
-//       apiData
-//     }
-//   }
-// }
 
 export default ProvidersList
