@@ -91,10 +91,7 @@ const RowOptions = ({ id }) => {
     setAnchorEl(null)
   }
 
-  const handleDelete = () => {
-    dispatch(deleteUser(id))
-    handleRowOptionsClose()
-  }
+
 
   return (
     <>
@@ -116,22 +113,9 @@ const RowOptions = ({ id }) => {
         }}
         PaperProps={{ style: { minWidth: '8rem' } }}
       >
-        <MenuItem
-          component={Link}
-          sx={{ '& svg': { mr: 2 } }}
-          href='/apps/user/view/account'
-          onClick={handleRowOptionsClose}
-        >
+        <MenuItem sx={{ '& svg': { mr: 2 } }} onClick={handleRowOptionsClose}>
           <Icon icon='tabler:eye' fontSize={20} />
           View
-        </MenuItem>
-        <MenuItem onClick={handleRowOptionsClose} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:edit' fontSize={20} />
-          Edit
-        </MenuItem>
-        <MenuItem onClick={handleDelete} sx={{ '& svg': { mr: 2 } }}>
-          <Icon icon='tabler:trash' fontSize={20} />
-          Delete
         </MenuItem>
       </Menu>
     </>
@@ -195,32 +179,6 @@ const columns = [
     }
   },
 
-  // {
-  //   flex: 0.15,
-  //   minWidth: 120,
-  //   headerName: 'Plan',
-  //   field: 'currentPlan',
-  //   renderCell: ({ row }) => {
-  //     return (
-  //       <Typography noWrap sx={{ fontWeight: 500, color: 'text.secondary', textTransform: 'capitalize' }}>
-  //         {row.currentPlan}
-  //       </Typography>
-  //     )
-  //   }
-  // },
-  // {
-  //   flex: 0.15,
-  //   minWidth: 190,
-  //   field: 'billing',
-  //   headerName: 'Billing',
-  //   renderCell: ({ row }) => {
-  //     return (
-  //       <Typography noWrap sx={{ color: 'text.secondary' }}>
-  //         {row.billing}
-  //       </Typography>
-  //     )
-  //   }
-  // },
   {
     flex: 0.1,
     minWidth: 110,
@@ -278,17 +236,6 @@ const UserList = ({ apiData }) => {
     setValue(val)
   }, [])
 
-  const handleRoleChange = useCallback(e => {
-    setRole(e.target.value)
-  }, [])
-
-  const handlePlanChange = useCallback(e => {
-    setPlan(e.target.value)
-  }, [])
-
-  const handleStatusChange = useCallback(e => {
-    setStatus(e.target.value)
-  }, [])
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
   return (
@@ -308,69 +255,6 @@ const UserList = ({ apiData }) => {
       </Grid>
       <Grid item xs={12}>
         <Card>
-          {/* <CardHeader title='Search Filters' />
-          <CardContent>
-            <Grid container spacing={6}>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='role-select'>Select Role</InputLabel>
-                  <Select
-                    fullWidth
-                    value={role}
-                    id='select-role'
-                    label='Select Role'
-                    labelId='role-select'
-                    onChange={handleRoleChange}
-                    inputProps={{ placeholder: 'Select Role' }}
-                  >
-                    <MenuItem value=''>Select Role</MenuItem>
-                    <MenuItem value='ADMIN'>Admin</MenuItem>
-                    <MenuItem value='USER'>User</MenuItem>
-                    <MenuItem value='SUPERAMIN'>Editor</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              {/* <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='plan-select'>Select Plan</InputLabel>
-                  <Select
-                    fullWidth
-                    value={plan}
-                    id='select-plan'
-                    label='Select Plan'
-                    labelId='plan-select'
-                    onChange={handlePlanChange}
-                    inputProps={{ placeholder: 'Select Plan' }}
-                  >
-                    <MenuItem value=''>Select Plan</MenuItem>
-                    <MenuItem value='basic'>Basic</MenuItem>
-                    <MenuItem value='company'>Company</MenuItem>
-                    <MenuItem value='enterprise'>Enterprise</MenuItem>
-                    <MenuItem value='team'>Team</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item sm={4} xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel id='status-select'>Select Status</InputLabel>
-                  <Select
-                    fullWidth
-                    value={status}
-                    id='select-status'
-                    label='Select Status'
-                    labelId='status-select'
-                    onChange={handleStatusChange}
-                    inputProps={{ placeholder: 'Select Status' }}
-                  >
-                    <MenuItem value=''>Select Status</MenuItem>
-                    <MenuItem value='true'>Active</MenuItem>
-                    <MenuItem value='false'>Inactive</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </CardContent>
-          <Divider sx={{ m: '0 !important' }} /> */}
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
           <DataGrid
             autoHeight
@@ -389,23 +273,5 @@ const UserList = ({ apiData }) => {
     </Grid>
   )
 }
-
-// export const getStaticProps = async () => {
-//   const token = window.localStorage.getItem('accessToken')
-
-//   const res = await axios.get('localhost:5454/api/v1/users/', {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       'x-access-token': process.env.NEXT_PUBLIC_X_ACCESS_TOKEN
-//     }
-//   })
-//   const apiData = res.data
-
-//   return {
-//     props: {
-//       apiData
-//     }
-//   }
-// }
 
 export default UserList
