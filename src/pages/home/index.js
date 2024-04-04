@@ -12,12 +12,13 @@ import ProviderTab from 'src/@core/components/dashboard/ProviderTab'
 import RecentTransactions from 'src/@core/components/dashboard/RecentTransactions'
 import transactions, { fetchTransations } from 'src/store/apps/transactions'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
+import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 const Home = () => {
   const dispatch = useDispatch()
   const transactions = useSelector(state => state.transactions.transactions)
-
+  const ability = useContext(AbilityContext)
   useEffect(() => {
     dispatch(
       fetchTransations({
@@ -39,12 +40,21 @@ const Home = () => {
         <Grid item xs={12} sm={6}>
           <ProviderTab />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <RecentTransactions transactions={transactions} />
-        </Grid>
+
+        {ability.can('read', 'transactions') ? (
+          <Grid item xs={12} sm={6}>
+            <RecentTransactions transactions={transactions} />
+          </Grid>
+        ) : (
+          <></>
+        )}
       </Grid>
     </ApexChartWrapper>
   )
+}
+Home.acl = {
+  action: 'read',
+  subject: 'home-page'
 }
 
 export default Home

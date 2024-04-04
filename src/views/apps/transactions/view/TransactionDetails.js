@@ -123,7 +123,7 @@ const TransactionDetails = props => {
       sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 400 } } }}
     >
       <Header>
-        <Typography variant='h6'>Add Provider</Typography>
+        <Typography variant='h6'>Transaction details</Typography>
         <IconButton
           size='small'
           onClick={handleClose}
@@ -207,18 +207,6 @@ const TransactionDetails = props => {
               <FormHelperText sx={{ color: 'error.main' }}>{errors.decription.message}</FormHelperText>
             )}
           </FormControl>
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <InputLabel id='role-select'>Set Status</InputLabel>
-            <Switch />
-          </FormControl>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button type='submit' variant='contained' sx={{ mr: 3 }}>
-              Submit
-            </Button>
-            <Button variant='outlined' color='secondary' onClick={handleClose}>
-              Cancel
-            </Button>
-          </Box>
         </form>
       </Box>
     </Drawer>

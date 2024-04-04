@@ -9,12 +9,12 @@ export const AppAbility = Ability
  */
 const defineRulesFor = (role, subject) => {
   const { can, rules } = new AbilityBuilder(AppAbility)
-  if (role === 'ADMIN') {
+  if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
     can('manage', 'all')
-  } else if (role === 'client') {
-    can(['read'], 'acl-page')
+  } else if (role === 'USER') {
+    can(['read'], 'home-page')
   } else {
-    can(['read', 'create', 'update', 'delete'], subject)
+    // can(['read', 'create', 'update', 'delete'], subject)
   }
 
   return rules
@@ -29,8 +29,8 @@ export const buildAbilityFor = (role, subject) => {
 }
 
 export const defaultACLObj = {
-  action: 'manage',
-  subject: 'all'
+  action: 'read',
+  subject: 'home-page'
 }
 
 export default defineRulesFor
