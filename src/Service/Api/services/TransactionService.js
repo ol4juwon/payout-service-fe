@@ -1,8 +1,18 @@
 import FetchAPI from '../fetchAPI'
-import { getAllTransactionUrl, getTransactionDetailsUrl, getValidateAccountUrl, getInitiatePayoutUrl } from '../endPoints'
+import {
+  getAllTransactionUrl,
+  getTransactionDetailsUrl,
+  getValidateAccountUrl,
+  getInitiatePayoutUrl,
+  getUserTransactionsUrl
+} from '../endPoints'
 
 export const getAllTransactions = async query => {
   return FetchAPI(getAllTransactionUrl(query), 'GET')
+}
+
+export const getUserTransactions = async body => {
+  return FetchAPI(getUserTransactionsUrl(body), 'GET')
 }
 
 export const getTransactionDetails = async id => {

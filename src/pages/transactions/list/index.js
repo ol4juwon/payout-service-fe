@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -34,10 +34,12 @@ import axios from 'axios'
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-import { fetchTransations } from 'src/store/apps/transactions'
+import { fetchTransations, fetchUserTransations } from 'src/store/apps/transactions'
 import TransactionDetails from 'src/views/apps/transactions/view/TransactionDetails'
 import InitiatePayoutSideBar from 'src/views/apps/transactions/view/InitiatePayoutSideBar'
 import { formatDate, formatMoney } from 'src/@core/utils/format'
+import { AbilityContext } from 'src/layouts/components/acl/Can'
+import { AuthContext } from 'src/context/AuthContext'
 
 // ** renders client column
 const userRoleObj = {
@@ -209,8 +211,9 @@ const TransactionList = ({ apiData }) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(100)
   const [orderBy, setOrderBy] = useState('createdAt')
-
+  const ability = useContext(AbilityContext)
   const [value, setValue] = useState('')
+  const { user } = useContext(AuthContext)
 
   // const [status, setStatus] = useState('')
   const [pageSize, setPageSize] = useState(10)
@@ -223,13 +226,15 @@ const TransactionList = ({ apiData }) => {
 
   useEffect(() => {
     dispatch(
-      fetchTransations({
-        all: true,
-        page,
-        limit,
-        orderBy,
-        sort: 'DESC'
-      })
+      ability.can('manage', 'transactions')
+        ? fetchTransations({
+            all: true,
+            page,
+            limit,
+            orderBy,
+            sort: 'DESC'
+          })
+        : fetchUserTransations(user._id, { all: true, page, limit, orderBy, sort: 'DESC' })
     )
   }, [dispatch])
 
@@ -256,12 +261,16 @@ const TransactionList = ({ apiData }) => {
       </Grid>
       <Grid item xs={12}>
         <Card>
-          <TableHeader
-            value={value}
-            title={'Initiate Payout'}
-            handleFilter={handleFilter}
-            toggle={toggleAddUserDrawer}
-          />
+          {ability.can('manage', 'transactions') ? (
+            <TableHeader
+              value={value}
+              title={'Initiate Payout'}
+              handleFilter={handleFilter}
+              toggle={toggleAddUserDrawer}
+            />
+          ) : (
+            <></>
+          )}
           <DataGrid
             autoHeight
             rowHeight={62}

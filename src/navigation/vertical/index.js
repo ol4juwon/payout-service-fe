@@ -3,7 +3,9 @@ const navigation = () => {
     {
       title: 'Home',
       path: '/home',
-      icon: 'tabler:smart-home'
+      icon: 'tabler:smart-home',
+      action: 'read',
+      subject: 'home-page'
     },
     {
       title: 'Users',
@@ -13,14 +15,15 @@ const navigation = () => {
     {
       path: '/providers/list',
 
-      // action: 'read',
-      subject: 'acl-page',
+      action: 'read',
+      subject: 'providers',
       title: 'Providers',
       icon: 'material-symbols:account-balance'
     },
     {
       path: '/transactions/list',
-
+      action: 'read',
+      subject: 'transactions',
       title: 'Transactions',
       icon: 'tabler:cards-filled'
     },

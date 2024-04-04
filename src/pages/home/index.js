@@ -10,24 +10,28 @@ import CrmEarningReportsWithTabs from 'src/@core/components/dashboard/CrmEarning
 import TabConnections from 'src/@core/components/dashboard/TabConnections'
 import ProviderTab from 'src/@core/components/dashboard/ProviderTab'
 import RecentTransactions from 'src/@core/components/dashboard/RecentTransactions'
-import transactions, { fetchTransations } from 'src/store/apps/transactions'
+import transactions, { fetchTransations, fetchUserTransations } from 'src/store/apps/transactions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useContext, useEffect } from 'react'
 import { AbilityContext } from 'src/layouts/components/acl/Can'
+import { AuthContext } from 'src/context/AuthContext'
 
 const Home = () => {
   const dispatch = useDispatch()
   const transactions = useSelector(state => state.transactions.transactions)
+  const { user } = useContext(AuthContext)
   const ability = useContext(AbilityContext)
   useEffect(() => {
     dispatch(
-      fetchTransations({
-        all: false,
-        page: 1,
-        limit: 10,
-        orderBy: 'createdAt',
-        sort: 'DESC'
-      })
+      ability.can('manage', 'transactions')
+        ? fetchTransations({
+            all: false,
+            page: 1,
+            limit: 10,
+            orderBy: 'createdAt',
+            sort: 'DESC'
+          })
+        : fetchUserTransations(user._id, {})
     )
   }, [])
 
@@ -37,17 +41,17 @@ const Home = () => {
         {/* <Grid item xs={12} lg={6}>
           <CrmEarningReportsWithTabs />
         </Grid> */}
-        <Grid item xs={12} sm={6}>
-          <ProviderTab />
-        </Grid>
-
-        {ability.can('read', 'transactions') ? (
+        {ability.can('read', 'providers') ? (
           <Grid item xs={12} sm={6}>
-            <RecentTransactions transactions={transactions} />
+            <ProviderTab />
           </Grid>
         ) : (
           <></>
         )}
+
+        <Grid item xs={12} sm={6}>
+          <RecentTransactions transactions={transactions} />
+        </Grid>
       </Grid>
     </ApexChartWrapper>
   )

@@ -89,3 +89,7 @@ export const getAllTransactionUrl = query => {
 export const getTransactionDetailsUrl = id => {
   return `/transactions/${id}/`
 }
+
+export const getUserTransactionsUrl = query => {
+  return `/transactions/${query.id}/user?page=${query.page}&all=${query.all}&limit=${query.limit}&orderBy=${query.orderBy}&sort=${query.sort}`
+}

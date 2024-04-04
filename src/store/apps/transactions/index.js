@@ -19,6 +19,21 @@ export const fetchTransations = createAsyncThunk(
   }
 )
 
+export const fetchUserTransations = createAsyncThunk(
+  'transactions/user/fetch',
+  async (userId, { all, sort = 'DESC', orderBy = 'createdAt', page = 1, limit = 10 }) => {
+    try {
+      const response = await TransactionService.getUserTransactions({ id: userId, all, page, limit, orderBy, sort })
+
+      return response
+    } catch (error) {
+      toast.error(error.message)
+
+      throw new Error('An Error occured ')
+    }
+  }
+)
+
 // ** Initiate Payout
 export const initiatePayout = createAsyncThunk(
   'Transactions/initiatePayout',
@@ -58,6 +73,19 @@ export const transactionsSlice = createSlice({
         state.params = action.payload.params
       })
       .addCase(fetchTransations.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload
+      })
+      .addCase(fetchUserTransations.pending, state => {
+        state.loading = true
+      })
+      .addCase(fetchUserTransations.fulfilled, (state, action) => {
+        state.loading = false
+        state.transactions = action.payload.data
+        state.total = action.payload.length
+        state.params = action.payload.params
+      })
+      .addCase(fetchUserTransations.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload
       })
