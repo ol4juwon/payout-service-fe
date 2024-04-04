@@ -60,6 +60,7 @@ import { FormHelperText } from '@mui/material'
 import { TransactionService } from 'src/Service/Api/services'
 import { addBeneficiary } from 'src/store/apps/beneficiary'
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 
 // ** Styled <sup> component
 const Sup = styled('sup')(({ theme }) => ({
@@ -83,6 +84,7 @@ const UserViewBilling = ({ id, user }) => {
   const router = useRouter()
 
   // ** States
+  const [error, setError] = useState(null)
   const [accountNumber, setAccountNumber] = useState('')
   const [bankcode, setBankcode] = useState('')
   const [name, setName] = useState('')
@@ -149,7 +151,7 @@ const UserViewBilling = ({ id, user }) => {
     // setName('')
     // setCvc('')
     // setExpiry('')
-    // setOpenEditCard(false)
+    setOpenEditCard(false)
   }
 
   // Handle Upgrade Plan dialog
@@ -177,7 +179,6 @@ const UserViewBilling = ({ id, user }) => {
   useEffect(() => {
     if (banks?.length > 0 && bankCodes == null) {
       if (banks?.length > 0 && bankCodes == null) {
-
         setBankCodes(banks)
       }
     }
@@ -202,10 +203,13 @@ const UserViewBilling = ({ id, user }) => {
   }
 
   const fetchAccount = async body => {
+    setError(null)
     const response = await TransactionService.validateAccount(body).catch(err => err)
     if (response.data) {
       setValue('accountName', response.data.account_name)
     }
+    setError('Validaing account failed')
+    toast.error('Validaing account failed')
 
     // return response
   }
@@ -216,7 +220,6 @@ const UserViewBilling = ({ id, user }) => {
         accountNo: accountNumber,
         bankcode: bankcode
       })
-
     }
   }, [accountNumber, bankcode])
 
@@ -357,7 +360,7 @@ const UserViewBilling = ({ id, user }) => {
                             )}
                           />
                         </FormControl>
-
+                        {error && <FormHelperText sx={{ color: 'error.main' }}>{error}</FormHelperText>}
                         {errors.accountName && (
                           <FormHelperText sx={{ color: 'error.main' }}>{errors.accountName.message}</FormHelperText>
                         )}

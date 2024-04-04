@@ -5,7 +5,7 @@ import { BankcodeService } from 'src/Service/Api/services'
 
 export const fetchBankcodes = createAsyncThunk('banks/get', async () => {
   try {
-    const response = await BankcodeService.getAllBankcodes({ page: 1, limit: 100, orderBy: 'bankName', sort: 'DESC' })
+    const response = await BankcodeService.getAllBankcodes({ page: 1, limit: 100, orderBy: 'bankName', sort: 'ASC' })
 
     return response.data
   } catch (error) {
