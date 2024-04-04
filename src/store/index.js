@@ -8,6 +8,7 @@ import provider from 'src/store/apps/providers'
 import banks from 'src/store/apps/banks'
 import transactions from 'src/store/apps/transactions'
 import beneficiaries from 'src/store/apps/beneficiary'
+import wallets from 'src/store/apps/wallet'
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     provider,
     banks,
     transactions,
-    beneficiaries
+    beneficiaries,
+    wallets
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({

@@ -38,6 +38,11 @@ const navigation = () => {
 
       title: 'Bank Codes',
       icon: 'tabler:building-bank'
+    },
+    {
+      path: '/wallets/list/',
+      title: 'Wallets',
+      icon: 'tabler:wallet'
     }
   ]
 }

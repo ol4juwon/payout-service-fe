@@ -14,5 +14,5 @@ export const createWallet = body => {
 }
 
 export const fundWallet = body => {
-  return FetchAPI(getFundWalletUrl(body.id), 'POST', body.payload)
+  return FetchAPI(getFundWalletUrl(body.userId), 'POST', { amount: body.amount })
 }

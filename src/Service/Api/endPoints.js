@@ -47,7 +47,7 @@ export const getCreateWalletUrl = () => {
 }
 
 export const getAllWalletsUrl = query => {
-  return `/wallet?page=${query.page}&limit=${query.limit}&orderBy=${query.sortBy}&sort=${query.sort}`
+  return `/wallet?all=${query.all}&page=${query.page}&limit=${query.limit}&orderBy=${query.orderBy}&sort=${query.sort}`
 }
 
 export const getWalletDetailsUrl = id => {
