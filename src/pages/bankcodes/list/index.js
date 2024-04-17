@@ -28,67 +28,16 @@ import CardStatsHorizontalWithDetails from 'src/@core/components/card-statistics
 // ** Custom Table Components Imports
 import TableHeader from 'src/views/apps/user/list/TableHeader'
 import AddUserDrawer from 'src/views/apps/user/list/AddUserDrawer'
-
-const userStatusObj = {
-  true: 'success',
-  false: 'warning'
-
-  // inactive: 'secondary'
-}
-
-const RowOptions = ({ id }) => {
-  // ** Hooks
-  // const dispatch = useDispatch()
-
-  // ** State
-  const [anchorEl, setAnchorEl] = useState(null)
-  const rowOptionsOpen = Boolean(anchorEl)
-
-  const handleRowOptionsClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleRowOptionsClose = () => {
-    setAnchorEl(null)
-  }
-
-  return (
-    <>
-      <IconButton size='small' onClick={handleRowOptionsClick}>
-        <Icon icon='tabler:dots-vertical' />
-      </IconButton>
-      <Menu
-        keepMounted
-        anchorEl={anchorEl}
-        open={rowOptionsOpen}
-        onClose={handleRowOptionsClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        PaperProps={{ style: { minWidth: '8rem' } }}
-      >
-        <MenuItem sx={{ '& svg': { mr: 2 } }} onClick={handleRowOptionsClose}>
-          <Icon icon='tabler:eye' fontSize={20} />
-          View
-        </MenuItem>
-      </Menu>
-    </>
-  )
-}
+import { fetchBankcodes } from 'src/store/apps/banks'
 
 const columns = [
   {
     flex: 0.25,
     minWidth: 280,
-    field: 'firstName',
-    headerName: 'User',
+    field: 'id',
+    headerName: 'Id',
     renderCell: ({ row }) => {
-      const { firstName, lastName, email } = row
+      const { id } = row
 
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -102,10 +51,34 @@ const columns = [
                 '&:hover': { color: 'primary.main' }
               }}
             >
-              {firstName + ' ' + lastName}
+              {id}
             </Typography>
-            <Typography noWrap variant='body2' sx={{ color: 'text.disabled' }}>
-              {email}
+          </Box>
+        </Box>
+      )
+    }
+  },
+  {
+    flex: 0.25,
+    minWidth: 280,
+    field: 'bankName',
+    headerName: 'Bank Name',
+    renderCell: ({ row }) => {
+      const { bankName } = row
+
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'flex-start', flexDirection: 'column' }}>
+            <Typography
+              noWrap
+              sx={{
+                fontWeight: 500,
+                textDecoration: 'none',
+                color: 'text.secondary',
+                '&:hover': { color: 'primary.main' }
+              }}
+            >
+              {bankName}
             </Typography>
           </Box>
         </Box>
@@ -114,52 +87,18 @@ const columns = [
   },
   {
     flex: 0.15,
-    field: 'role',
+    field: 'bankCode',
     minWidth: 170,
-    headerName: 'Role',
+    headerName: 'Bank Code',
     renderCell: ({ row }) => {
       return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <CustomAvatar
-            skin='light'
-            sx={{ mr: 4, width: 30, height: 30 }}
-            color={userRoleObj[row.role].color || 'primary'}
-          >
-            <Icon icon={userRoleObj[row.role].icon} />
-          </CustomAvatar>
           <Typography noWrap sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>
-            {row.role}
+            {row.bankCode}
           </Typography>
         </Box>
       )
     }
-  },
-
-  {
-    flex: 0.1,
-    minWidth: 110,
-    field: 'active',
-    headerName: 'Status',
-    renderCell: ({ row }) => {
-      return (
-        <CustomChip
-          rounded
-          skin='light'
-          size='small'
-          label={row.isVerified ? 'Verified' : 'Unverified'}
-          color={userStatusObj[row.isVerified]}
-          sx={{ textTransform: 'capitalize' }}
-        />
-      )
-    }
-  },
-  {
-    flex: 0.1,
-    minWidth: 100,
-    sortable: false,
-    field: 'actions',
-    headerName: 'Actions',
-    renderCell: ({ row }) => <RowOptions id={row.id} />
   }
 ]
 
@@ -175,19 +114,13 @@ const UserList = ({ apiData }) => {
   // ** Hooks
   const dispatch = useDispatch()
 
-  // const store = useSelector(state => state)
+  const store = useSelector(state => state.banks)
 
+  useEffect(() => {
+    dispatch(fetchBankcodes())
+  }, [dispatch])
 
-  // useEffect(() => {
-  //   dispatch(
-  //     fetchData({
-  //       role,
-  //       status,
-  //       q: value,
-  //       currentPlan: plan
-  //     })
-  //   )
-  // }, [dispatch, plan, role, status, value])
+  console.log({ bankcodes: store?.banks })
 
   const handleFilter = useCallback(val => {
     setValue(val)
@@ -213,16 +146,16 @@ const UserList = ({ apiData }) => {
       <Grid item xs={12}>
         <Card>
           <TableHeader value={value} handleFilter={handleFilter} toggle={toggleAddUserDrawer} />
-          {/* <DataGrid
+          <DataGrid
             autoHeight
             rowHeight={62}
-            rows={store.user.data}
+            rows={store?.banks}
             columns={columns}
             pageSize={pageSize}
             disableSelectionOnClick
             rowsPerPageOptions={[10, 25, 50]}
             onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-          /> */}
+          />
         </Card>
       </Grid>
 

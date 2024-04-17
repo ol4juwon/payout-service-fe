@@ -6,9 +6,13 @@ import { BankcodeService } from 'src/Service/Api/services'
 export const fetchBankcodes = createAsyncThunk('banks/get', async () => {
   try {
     const response = await BankcodeService.getAllBankcodes({ page: 1, limit: 100, orderBy: 'bankName', sort: 'ASC' })
+    console.log('fetching banks')
+
+    console.log({ response })
 
     return response.data
   } catch (error) {
+    console.log('errro', error)
     throw new Error(error)
   }
 })
@@ -28,6 +32,7 @@ export const bankSlice = createSlice({
       })
       .addCase(fetchBankcodes.fulfilled, (state, action) => {
         state.loading = false
+        console.log({ payload: action.payload })
         state.banks = action.payload
       })
       .addCase(fetchBankcodes.rejected, (state, action) => {
